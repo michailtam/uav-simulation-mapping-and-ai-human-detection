@@ -7,3 +7,6 @@
 [submodule "ultralytics"]
 	path = ultralytics
 	url = https://github.com/ultralytics/ultralytics.git
+[submodule "external/px4_ros_com"]
+	path = external/px4_ros_com
+	url = https://github.com/PX4/px4_ros_com.git

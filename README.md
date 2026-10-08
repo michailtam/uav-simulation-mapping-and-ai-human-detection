@@ -143,6 +143,7 @@ sudo apt update && sudo apt install -y \
 ### **1️⃣** Clone the project from the repository
 ```bash
 git clone --recurse-submodules https://github.com/michailtam/uav-mapping-and-ai-human-detection.git
+cd uav-mapping-and-ai-human-detection
 ```
 
 ### **2️⃣** Setup Autopilot for PX4
@@ -160,9 +161,11 @@ rm -rf build/
 # Build again with local install prefix.
 make px4_sitl gz_x500 CMAKE_INSTALL_PREFIX=$(pwd)/build/px4_sitl_default/install
 ```
+**Note💡:** Once Gazebo opens with the spawned x500 drone, the simulation stack is fully initialized and working properly. Close the simulator by pressing Ctrl+C in your terminal and proceed to the following step.
 
 ### **3️⃣** Setup uORB to ROS 2 Message Translation via Micro-XRCE-DDS
 ```bash
+cd ../../
 git clone -b v2.4.3 https://github.com/eProsima/Micro-XRCE-DDS-Agent.git ./external/Micro-XRCE-DDS-Agent
 cd ./external/Micro-XRCE-DDS-Agent
 mkdir build
@@ -171,7 +174,7 @@ cmake ..
 make
 sudo make install
 sudo ldconfig /usr/local/lib/
-cd ../../
+cd ../../../
 ```
 
 ### **4️⃣** Setup PX4 messages
@@ -209,6 +212,8 @@ PX4_SYS_AUTOSTART=4229 PX4_GZ_MODEL=x650 ./external/PX4-Autopilot/build/px4_sitl
 
 # Note: To kill all processes issue: $ pkill -9 -f px4; pkill -9 -f gz
 ```
+**Note💡:** Gazebo will open displaying the x650 drone inside the Baylands environment.
+If your terminal outputs ERROR [vehicle_imu] 0 - gyro/accel timestamp error messages, you can safely ignore them for now. These errors appear because the ROS 2 bridge has not been started yet and will be addressed in the next step.
 
 ## Docker
 **Note💡:** Will be coming soon.
@@ -220,7 +225,7 @@ Move to the root folder of the project and execute the following **step-by-step*
 ### Terminal 1: Execute the shell script
 Launch PX4 SITL and Gazebo in the background, bridge ROS 2 and Gazebo communication, and initialize RTAB-Map 3D mapping with real-time AI object detection.
 ```bash
-# Note: Previously, clear any previous build, log and install folders with rm -rf install/ log/ build/
+rm -rf install/ log/ build/
 colcon build
 source install/setup.bash
 ./src/uav_bringup/sh/open_ros_terminals.sh
